@@ -39,17 +39,17 @@ class Table(QtGui.QTableWidget):
             print('Connected')
         else:
             print('can\'t to connect to data base')
+            raise Exception('Connection data incorrect')
             
-        query_client = QSqlQuery('select firstName, lastName, patrName, sex, birthDate from Client where deleted = 0;')
-        query_client_passport = QSqlQuery('select serial, number, date from ClientDocument where client_id in (select id from Client where deleted = 0);')
-        query_client_policy = QSqlQuery('select serial, number, endDate from ClientPolicy where client_id in (select Client.id from Client where Client.deleted = 0);')
+        while(self.rowCount() > 0):
+            self.removeRow(0)
         
-        valid = (query_client.exec_(), query_client_passport.exec_(), query_client_policy.exec_())        
+        query_client = QSqlQuery('select C.firstName, C.lastName, C.patrName, C.sex, C.birthDate, CP.serial, CP.number, CP.endDate, CD.serial, CD.number, CD.date from Client C left\
+                                join ClientPolicy CP on C.id = CP.client_id left join ClientDocument CD on CD.client_id = C.id;')
         
-        if(False in valid):
-            report = zip(['query_client', 'query_client_passport', 'query_client_policy'], valid)
-            msg = str(report)
-            raise Exception('Can\'t make correct query to mysql' + msg)
+        
+        if(query_client.exec_() == False):
+            raise Exception('Can\'t make correct query to mysql')
         
         
         self.setColumnCount(len(self.headers))
@@ -58,33 +58,38 @@ class Table(QtGui.QTableWidget):
         current_year = QtCore.QDate().currentDate().year()     
                 
         index = 0
-        while(query_client.next() and query_client_passport.next()):
+        while(query_client.next()):
             
             full_name = ' '.join([query_client.value(0), query_client.value(1), query_client.value(2)])
 
-            age_birth_date = ' age, '.join([str(current_year - query_client.value(4).year()), query_client.value(4).toString()])
+            age_birth_date = ' age, '.join([str(current_year - query_client.value(4).year()), \
+            query_client.value(4).toString()])
 
             sex = u'мужской'
             if query_client.value(3) == 2:
                 sex = u'женский'
-                
-            passport_data = ' '.join([query_client_passport.value(0), query_client_passport.value(1), query_client_passport.value(2).toString()])
-            policy_data = 'Not exist'
-                
+            
+            if isinstance(query_client.value(8), QtCore.QPyNullVariant):
+                self.setItem(index,4, QtGui.QTableWidgetItem(u'Отсутствует'))
+            else:    
+                passport_data = ' '.join([str(query_client.value(8)), str(query_client.value(9)),\
+                query_client.value(10).toString()])
+                self.setItem(index,4, QtGui.QTableWidgetItem(passport_data))                            
+            
             self.setItem(index,0,QtGui.QTableWidgetItem(full_name))
             self.setItem(index,1,QtGui.QTableWidgetItem(age_birth_date))
             self.setItem(index,2,QtGui.QTableWidgetItem(sex))
 
-            if(query_client_policy.next()):
-                policy_data = ' '.join([query_client_policy.value(0), query_client_policy.value(1), query_client_policy.value(2).toString()])
+            if(isinstance(query_client.value(5), QtCore.QPyNullVariant)):
+                self.setItem(index,3, QtGui.QTableWidgetItem(u'Отсутствует'))
+            else:    
+                policy_data = ' '.join([query_client.value(5), query_client.value(6), \
+                query_client.value(7).toString()])
                 self.setItem(index,3, QtGui.QTableWidgetItem(policy_data))
-            
-            self.setItem(index,4, QtGui.QTableWidgetItem(passport_data))
-            
-#            self.setItem(index,3,QtGui.QTableWidgetItem(str(current_year - query.value(3).year())))
+        
             index += 1
             
-        
+        db.close()
         
         
 if __name__ == '__main__':

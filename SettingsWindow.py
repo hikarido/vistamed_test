@@ -21,7 +21,6 @@ class SettingsWindow(QtGui.QDialog):
         self.end_dialog.clicked.connect(self.close_dialog)
         
     def close_dialog(self):
-        print('closed')
         self.new_data_already_signal.emit()
         self.hide()
         
