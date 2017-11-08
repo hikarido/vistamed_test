@@ -11,25 +11,43 @@ from PyQt4 import QtCore, QtGui
 import Table
 
 class Viewer(QtGui.QWidget):
+
+    open_settings_signal = QtCore.pyqtSignal(name = 'open_settings')
+    reload_database_signal = QtCore.pyqtSignal(name = 'reload_database')
+    close_application_signal = QtCore.pyqtSignal(name = 'close_application')    
+    
     def __init__(self):
         QtGui.QWidget.__init__(self, parent = None)
         self.make_viewer()   
         self.set_signals()
         
     def make_viewer(self):
+    
+        self.settingsBox = QtGui.QComboBox()
+        self.settingsBox.addItem('Settings')
+        self.settingsBox.addItem('Reload')
+        self.settingsBox.addItem('Quit')
         
-        self.btnQuit = QtGui.QPushButton('Quit')
         self.table = Table.Table()
         
         self.vLayout = QtGui.QVBoxLayout()
         self.vLayout.setAlignment(QtCore.Qt.AlignHCenter)
+        self.vLayout.addWidget(self.settingsBox)
         self.vLayout.addWidget(self.table)
-        self.vLayout.addWidget(self.btnQuit)
         self.setLayout(self.vLayout)
         
     def set_signals(self):
-        self.connect(self.btnQuit, QtCore.SIGNAL('clicked()'), QtGui.qApp.quit)           
-       
+        self.settingsBox.activated.connect(self.signal_listener)
+                
+        
+    def signal_listener(self, name):
+        if(name == 0):
+            self.open_settings_signal.emit()
+        elif name == 1:
+            self.reload_database_signal.emit()
+        else:
+            self.close_application_signal.emit()
+        
  
             
 if __name__ == '__main__':
