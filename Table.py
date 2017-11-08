@@ -51,7 +51,9 @@ class Table(QtGui.QTableWidget):
                 
         index = 0
         while(query_client.next() and query_client_passport.next()):
+            
             full_name = ' '.join([query_client.value(0), query_client.value(1), query_client.value(2)])
+
             age_birth_date = ' age, '.join([str(current_year - query_client.value(4).year()), query_client.value(4).toString()])
 
             sex = u'мужской'

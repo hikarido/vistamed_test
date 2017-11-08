@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from PyQt4 import QtCore, QtGui
 from ViewerWidget import Viewer
+from SettingsWindow import SettingsWindow
 import sys
 
 class MainWindow(QtGui.QApplication):
@@ -16,6 +17,7 @@ class MainWindow(QtGui.QApplication):
         self.window = Viewer()
         self.window.setWindowTitle("VistaMed test applocation")
         self.window.setGeometry(QtCore.QRect(100, 100, 900, 600))
+        self.settings_window = SettingsWindow()
         self.window.show()
         
     def set_signals(self):
@@ -25,13 +27,14 @@ class MainWindow(QtGui.QApplication):
         
     def open_settings(self):
         print('open settings')
+        self.settings_window.show()
         
     def reload_database(self):
         print('reload data base')
         
     def close_application(self):
+        print('close application')        
         self.quit()
-        print('close application')
 
 
 if __name__ == '__main__':
