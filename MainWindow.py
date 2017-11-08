@@ -24,6 +24,10 @@ class MainWindow(QtGui.QApplication):
         self.window.open_settings_signal.connect(self.open_settings)
         self.window.reload_database_signal.connect(self.reload_database)
         self.window.close_application_signal.connect(self.close_application)
+        self.settings_window.new_data_already_signal.connect(self.new_data_already)
+        
+    def new_data_already(self):
+        self.window.table.load_data(default = False, settings = self.settings_window.get_settings())        
         
     def open_settings(self):
         print('open settings')

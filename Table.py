@@ -12,20 +12,28 @@ class Table(QtGui.QTableWidget):
     Загружает данные из базы данных и выводит их в таблицу
     реализует сортировку по столбцам
     '''
-    def __init__(self, column_count = 5, row_count = 5, parent=None):
+    def __init__(self, parent=None):
         QtGui.QTableWidget.__init__(self, parent)        
         
         self.headers = u"ФИО;Возрост;Пол;Полис;Паспорт".split(";")
         self.header_len = len(self.headers);
-        self.load_data() 
+        self.load_data(default = True) 
         self.setHorizontalHeaderLabels(self.headers)                            
                   
-    def load_data(self):
-        db = QSqlDatabase.addDatabase('QMYSQL');
-        db.setHostName('localhost');
-        db.setDatabaseName('vistamed_test');
-        db.setUserName('root');
-        db.setPassword('hero123001');
+    def load_data(self, default = True, settings = dict()):
+        if default:
+            db = QSqlDatabase.addDatabase('QMYSQL');
+            db.setHostName('localhost');
+            db.setDatabaseName('vistamed_test');
+            db.setUserName('root');
+            db.setPassword('hero123001');
+        else:
+            db = QSqlDatabase.addDatabase('QMYSQL');
+            db.setHostName(settings['Host Name']);
+            db.setDatabaseName(settings['DataBase name']);
+            db.setUserName(settings['User Name']);
+            db.setPassword(settings['Password']);
+        
         ok = db.open();
         if(ok):
             print('Connected')
@@ -83,7 +91,7 @@ if __name__ == '__main__':
     import sys
     app = QtGui.QApplication(sys.argv)
     
-    table = Table(50, 100)
+    table = Table()
     table.show()
     
     sys.exit(app.exec_())
