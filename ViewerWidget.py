@@ -29,9 +29,9 @@ class Viewer(QtGui.QWidget):
         self.settingsBox.addItem('Quit')
         
         self.table = Table.Table()
-        
+        self.table.setSortingEnabled(True)
         self.vLayout = QtGui.QVBoxLayout()
-        self.vLayout.setAlignment(QtCore.Qt.AlignHCenter)
+        self.vLayout.setAlignment(QtCore.Qt.AlignVCenter)
         self.vLayout.addWidget(self.settingsBox)
         self.vLayout.addWidget(self.table)
         self.setLayout(self.vLayout)

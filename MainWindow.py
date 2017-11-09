@@ -30,14 +30,17 @@ class MainWindow(QtGui.QApplication):
         self.window.table.load_data(default = False, settings = self.settings_window.get_settings())        
         
     def open_settings(self):
-        print('open settings')
         self.settings_window.show()
         
     def reload_database(self):
-        print('reload data base')
+        new_data = self.settings_window.get_settings()
+        if str() in new_data.values():
+            print('Empty settings. New settings not installed.')
+        else:        
+            self.window.table.load_data(default = False, settings = new_data)
         
     def close_application(self):
-        print('close application')        
+      
         self.quit()
 
 

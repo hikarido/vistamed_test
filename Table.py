@@ -35,22 +35,32 @@ class Table(QtGui.QTableWidget):
             db.setPassword(settings['Password']);
         
         ok = db.open();
-        if(ok):
-            print('Connected')
-        else:
-            print('can\'t to connect to data base')
-            raise Exception('Connection data incorrect')
-            
+        
+        try:
+            if(ok):
+                print('Connected')
+            else:
+                print('Connection data is incorrect')
+                raise Exception()
+        except Exception:
+            db.close()
+            QSqlDatabase.removeDatabase("qt_sql_default_connection");
+            return
+        
         while(self.rowCount() > 0):
             self.removeRow(0)
         
         query_client = QSqlQuery('select C.firstName, C.lastName, C.patrName, C.sex, C.birthDate, CP.serial, CP.number, CP.endDate, CD.serial, CD.number, CD.date from Client C left\
                                 join ClientPolicy CP on C.id = CP.client_id left join ClientDocument CD on CD.client_id = C.id;')
         
-        
-        if(query_client.exec_() == False):
-            raise Exception('Can\'t make correct query to mysql')
-        
+        try:
+            if(query_client.exec_() == False):
+                raise Exception()
+        except Exception:
+            print('Can\'t make correct query to mysql')
+            db.close()            
+            QSqlDatabase.removeDatabase("qt_sql_default_connectiont");
+            return
         
         self.setColumnCount(len(self.headers))
         self.setRowCount(query_client.size()) 
@@ -88,8 +98,10 @@ class Table(QtGui.QTableWidget):
                 self.setItem(index,3, QtGui.QTableWidgetItem(policy_data))
         
             index += 1
+
+        db.close()            
+        QSqlDatabase.removeDatabase("vistamed_test");
             
-        db.close()
         
         
 if __name__ == '__main__':
