@@ -37,8 +37,14 @@ left join
 ## Сообщения об ошибках:
 * Connection data is incorrect - программа не смогла подключиться к базе данных
 * Can't make correct query to mysql - программе не удалось выполнить запрос к базу данных
+## Интерфейс
 
-
+* Главное окно
+![Screenshot](main_window.png)
+* Окно настроек
+![Screenshot](settings.png)
+* Таблица с установленным выделением
+![Screenshot](selected.png)
 
 
 
