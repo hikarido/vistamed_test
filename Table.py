@@ -19,6 +19,7 @@ class Table(QtGui.QTableWidget):
         self.header_len = len(self.headers);
         self.load_data(default = True) 
         self.setHorizontalHeaderLabels(self.headers)
+        self.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
 
         for i in range(0, self.columnCount()):
             self.horizontalHeader().setResizeMode(i, QtGui.QHeaderView.Stretch)
@@ -105,8 +106,15 @@ class Table(QtGui.QTableWidget):
 
         db.close()            
         QSqlDatabase.removeDatabase("vistamed_test");
-            
-        
+
+    def present_search(self, text):
+        self.clearSelection()
+        iteams = self.findItems(text, QtCore.Qt.MatchRegExp)
+        print(iteams)
+        for i in iteams:
+            self.selectRow(i.row());
+    
+
         
 if __name__ == '__main__':
     import sys

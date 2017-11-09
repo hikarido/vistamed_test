@@ -14,7 +14,7 @@ class Viewer(QtGui.QWidget):
 
     open_settings_signal = QtCore.pyqtSignal(name = 'open_settings')
     reload_database_signal = QtCore.pyqtSignal(name = 'reload_database')
-    close_application_signal = QtCore.pyqtSignal(name = 'close_application')    
+    close_application_signal = QtCore.pyqtSignal(name = 'close_application')
     
     def __init__(self):
         QtGui.QWidget.__init__(self, parent = None)
@@ -29,15 +29,23 @@ class Viewer(QtGui.QWidget):
         self.settingsBox.addItem('Quit')
         
         self.table = Table.Table()
+        self.search_line = QtGui.QLineEdit()
+        self.search_lina_label = QtGui.QLabel('Search')
+        self.btn_search = QtGui.QPushButton('Search')
+        
         self.table.setSortingEnabled(True)
         self.vLayout = QtGui.QVBoxLayout()
         self.vLayout.setAlignment(QtCore.Qt.AlignVCenter)
         self.vLayout.addWidget(self.settingsBox)
         self.vLayout.addWidget(self.table)
+        self.vLayout.addWidget(self.search_lina_label)
+        self.vLayout.addWidget(self.search_line) 
+        self.vLayout.addWidget(self.btn_search)
         self.setLayout(self.vLayout)
         
     def set_signals(self):
         self.settingsBox.activated.connect(self.signal_listener)
+        self.btn_search.clicked.connect(self.make_search)
                 
         
     def signal_listener(self, name):
@@ -47,6 +55,9 @@ class Viewer(QtGui.QWidget):
             self.reload_database_signal.emit()
         else:
             self.close_application_signal.emit()
+            
+    def make_search(self): 
+        self.table.present_search(self.search_line.text())
         
  
             

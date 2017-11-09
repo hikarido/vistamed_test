@@ -40,7 +40,6 @@ class MainWindow(QtGui.QApplication):
             self.window.table.load_data(default = False, settings = new_data)
         
     def close_application(self):
-      
         self.quit()
 
 
