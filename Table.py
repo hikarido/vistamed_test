@@ -18,7 +18,11 @@ class Table(QtGui.QTableWidget):
         self.headers = u"ФИО;Возрост;Пол;Полис;Паспорт".split(";")
         self.header_len = len(self.headers);
         self.load_data(default = True) 
-        self.setHorizontalHeaderLabels(self.headers)                            
+        self.setHorizontalHeaderLabels(self.headers)
+
+        for i in range(0, self.columnCount()):
+            self.horizontalHeader().setResizeMode(i, QtGui.QHeaderView.Stretch)
+                            
                   
     def load_data(self, default = True, settings = dict()):
         if default:
