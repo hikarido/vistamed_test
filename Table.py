@@ -109,10 +109,16 @@ class Table(QtGui.QTableWidget):
 
     def present_search(self, text):
         self.clearSelection()
-        iteams = self.findItems(text, QtCore.Qt.MatchRegExp)
+#        filter_exp = QtCore.QRegExp(text, QtCore.Qt.CaseInsensitive)
+        print(text)
+        iteams = self.findItems(text, QtCore.Qt.MatchContains)
+        selected = []
         print(iteams)
         for i in iteams:
+            if i.row() in selected:
+                continue
             self.selectRow(i.row());
+            selected.append(i.row())
     
 
         
