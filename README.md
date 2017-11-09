@@ -25,7 +25,7 @@ left join
 ```
 
 получается таблицу вида: 
-![selected Table](https://yadi.sk/i/8pzQ3NbX3PYNKY)
+![Screenshot](table.png)
 ## Классы 
 * класса SettingsWindow содержит поля для ввыода настроек
 * Класс Table выполняет поиск в таблице по флагу QtCore.Qt.MatchContains и тексту из ViewerWidget.search_line, подсвечивает строки с вхождениями. Поиск выполняется по нажатию кнопки Search
