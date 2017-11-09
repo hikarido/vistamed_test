@@ -10,7 +10,7 @@ from PyQt4.QtSql import QSqlDatabase, QSqlQuery
 class Table(QtGui.QTableWidget):
     '''
     Загружает данные из базы данных и выводит их в таблицу
-    реализует сортировку по столбцам
+    реализует сортировку по столбцам, поиск и подстветку найденных элементов
     '''
     def __init__(self, parent=None):
         QtGui.QTableWidget.__init__(self, parent)        
@@ -25,7 +25,12 @@ class Table(QtGui.QTableWidget):
             self.horizontalHeader().setResizeMode(i, QtGui.QHeaderView.Stretch)
                             
                   
+                 
     def load_data(self, default = True, settings = dict()):
+        '''
+            Загружает данные из БД по параметрам из settings полученным из окна настроек @see SettingsWindow
+            или использует параметры по умолчанию
+        '''
         if default:
             db = QSqlDatabase.addDatabase('QMYSQL');
             db.setHostName('localhost');
@@ -55,6 +60,14 @@ class Table(QtGui.QTableWidget):
         while(self.rowCount() > 0):
             self.removeRow(0)
         
+        '''
+            Один запрос на все данные 
+            - ФИО
+            - дата рождения + возраст
+            - пол
+            - информация о действующем полисе ОМС при наличии
+            - информация о действующем документе (паспорт, свидетельство о рождении и т.д.)
+        '''
         query_client = QSqlQuery('select C.firstName, C.lastName, C.patrName, C.sex, C.birthDate, CP.serial, CP.number, CP.endDate, CD.serial, CD.number, CD.date from Client C left\
                                 join ClientPolicy CP on C.id = CP.client_id left join ClientDocument CD on CD.client_id = C.id;')
         
@@ -108,6 +121,12 @@ class Table(QtGui.QTableWidget):
         QSqlDatabase.removeDatabase("vistamed_test");
 
     def present_search(self, text):
+        '''
+            производит поиск по text метдом QtCore.Qt.MatchContains
+            снимает предыдущее выделение
+            ищит вхождения
+            подствечивает строки таблицы по вхождениям
+        '''
         self.clearSelection()
 #        filter_exp = QtCore.QRegExp(text, QtCore.Qt.CaseInsensitive)
         print(text)

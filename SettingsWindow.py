@@ -8,13 +8,23 @@ Created on Wed Nov  8 18:20:02 2017
 from PyQt4 import QtCore, QtGui, uic
 
 class SettingsWindow(QtGui.QDialog):
-    
+    '''
+        всплывающее окно настроек приложения
+        Настройки:
+        - имя хоста 
+        - идентификатор БД mysql
+        - имя пользователя mysql
+        - пароль пользователя mysql
+        сигнал new_data_already_signal возбуждается при закрытии окна
+    '''
+
     new_data_already_signal = QtCore.pyqtSignal(name = 'new_data_already')
     
     def __init__(self, parent= None):
         QtGui.QDialog.__init__(self)
         uic.loadUi("/home/takava/Forge/vistamed_test/dialog.ui", self)
         self.setWindowTitle("Settings")
+        self.setWindowFlags((QtCore.Qt.WindowFlags() | QtCore.Qt.CustomizeWindowHint) & ~QtCore.Qt.WindowCloseButtonHint)
         self.set_signals()
         
     def set_signals(self):
@@ -25,6 +35,9 @@ class SettingsWindow(QtGui.QDialog):
         self.hide()
         
     def get_settings(self):
+        '''
+            возвращает словарь с новыми настройками
+        '''
         data = dict()
         for i in range(0, self.gridLayout.rowCount()):
             key = self.gridLayout.itemAtPosition(i, 0).widget().text()            

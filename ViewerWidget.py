@@ -11,6 +11,10 @@ from PyQt4 import QtCore, QtGui
 import Table
 
 class Viewer(QtGui.QWidget):
+    '''
+        Агрегирует все графические компоненты приложения
+        и управляет их сигналами
+    '''
 
     open_settings_signal = QtCore.pyqtSignal(name = 'open_settings')
     reload_database_signal = QtCore.pyqtSignal(name = 'reload_database')
@@ -22,6 +26,9 @@ class Viewer(QtGui.QWidget):
         self.set_signals()
         
     def make_viewer(self):
+        '''
+            Размещает графические компоненты приложения
+        '''
     
         self.settingsBox = QtGui.QComboBox()
         self.settingsBox.addItem('Settings')
@@ -42,6 +49,9 @@ class Viewer(QtGui.QWidget):
         self.vLayout.addWidget(self.search_line) 
         self.vLayout.addWidget(self.btn_search)
         self.setLayout(self.vLayout)
+        self.setWindowFlags((QtCore.Qt.WindowFlags() | \
+        QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowMaximizeButtonHint) &\
+        ~QtCore.Qt.WindowCloseButtonHint)
         
     def set_signals(self):
         self.settingsBox.activated.connect(self.signal_listener)

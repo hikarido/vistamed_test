@@ -4,6 +4,7 @@ from ViewerWidget import Viewer
 from SettingsWindow import SettingsWindow
 import sys
 
+
 class MainWindow(QtGui.QApplication):
     def __init__(self):
         QtGui.QApplication.__init__(self, sys.argv)
@@ -18,6 +19,7 @@ class MainWindow(QtGui.QApplication):
         self.window.setWindowTitle("VistaMed test applocation")
         self.window.setGeometry(QtCore.QRect(100, 100, 900, 600))
         self.settings_window = SettingsWindow()
+        
         self.window.show()
         
     def set_signals(self):
