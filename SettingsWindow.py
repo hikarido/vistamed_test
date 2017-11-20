@@ -22,7 +22,7 @@ class SettingsWindow(QtGui.QDialog):
     
     def __init__(self, parent= None):
         QtGui.QDialog.__init__(self)
-        uic.loadUi("/home/takava/Forge/vistamed_test/dialog.ui", self)
+        uic.loadUi("dialog.ui", self)
         self.setWindowTitle("Settings")
         self.setWindowFlags((QtCore.Qt.WindowFlags() | QtCore.Qt.CustomizeWindowHint) & ~QtCore.Qt.WindowCloseButtonHint)
         self.set_signals()
